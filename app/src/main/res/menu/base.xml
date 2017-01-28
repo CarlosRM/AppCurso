@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="all">
+        <item
+            android:id="@+id/action_toast"
+            android:orderInCategory="100"
+            android:title="@string/toast_notifications"
+            android:checked="true"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/action_snackbar"
+            android:orderInCategory="100"
+            android:checked="true"
+            android:title="@string/snackbar_notifications"
+            app:showAsAction="never" />
+    </group>
+
+    <item
+        android:id="@+id/browser_button"
+        android:orderInCategory="100"
+        android:title="Browse"
+        android:icon="@drawable/ic_open_in_browser_white_18dp"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/call_button"
+        android:orderInCategory="100"
+        android:title="Call"
+        android:icon="@drawable/ic_call_white_18dp"
+        app:showAsAction="always"/>
+</menu>

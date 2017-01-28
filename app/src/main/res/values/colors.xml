@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#212121</color>
+    <color name="colorPrimaryDark">#212121</color>
+    <!--color name="colorAccent">#FF4081</color-->
+    <color name="colorAccent">#0288d1</color>
+    <color name="colorBasicCalculatorButton">#212121</color>
+    <color name="colorBasicCalculatorButtonEffect">#616161</color>
+    <color name="colorSecondCalculatorButton">#4fc3f7</color>
+    <color name="colorSecondCalculatorButtonEffect">#b3e5fc</color>
+    <color name="colorEqualCalculatorButton">#01579b</color>
+    <color name="colorEqualCalculatorButtonEffect">#0288d1</color>
+    <color name="colorTopCalculatorRow">#80deea</color>
+    <color name="colorTopCalculatorRowEffect">#bbdefb</color>
+</resources>
