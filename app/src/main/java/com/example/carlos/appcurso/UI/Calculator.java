@@ -340,29 +340,40 @@ public class Calculator extends Fragment implements View.OnClickListener{
                 break;
             case R.id.equalButton:
                 if(!actualExpression.isEmpty()) {
-                    Log.d("ACTUALEXPRESSION",actualExpression);
                     answerExpression = actualExpression.replaceAll("\\*",ans);
                     String result = calculator.processInput(answerExpression.trim());
-                    Log.d("RESULT",result);
-                    if (result.equals("Wrong expression")) {
-                        if(preferences.getBoolean("toast",false)){
-                            Toast.makeText(activity,"Wrong expression",Toast.LENGTH_SHORT).show();
-                        }
-                        if(preferences.getBoolean("snackbar",false)){
-                            Snackbar.make(v,"Wrong expression",Snackbar.LENGTH_SHORT).show();
-                        }
-                        resultDisplay.setText("");
-                        calculator = new FullCalculator();
-                    } else {
-                        String replaced = result.replaceAll("\\.",",");
-                        Log.d("RESULT2",replaced);
-                        resultDisplay.setText("= " + replaced);
-                        ans = result;
-                        Log.d("ANS",ans);
-                    }
+                    resultTreatment(result);
                 }
-
                 break;
+        }
+    }
+
+    private void resultTreatment(String result) {
+        if (result.equals("Wrong expression")) {
+            if(openParenthesisCounter > 0) result = "Wrong use of parentheses";
+            if(preferences.getBoolean("toast",false)){
+                Toast.makeText(activity,result,Toast.LENGTH_SHORT).show();
+            }
+            if(preferences.getBoolean("snackbar",false)){
+                Snackbar.make(v,result,Snackbar.LENGTH_SHORT).show();
+            }
+            resultDisplay.setText("");
+            calculator = new FullCalculator();
+        } else if(result.equals("Infinity") || result.equals("NaN")) {
+            if(preferences.getBoolean("toast",false)){
+                Toast.makeText(activity,"ERROR: Division by zero",Toast.LENGTH_SHORT).show();
+            }
+            if(preferences.getBoolean("snackbar",false)){
+                Snackbar.make(v,"ERROR: Division by zero",Snackbar.LENGTH_SHORT).show();
+            }
+            resultDisplay.setText("");
+            calculator = new FullCalculator();
+        } else {
+            String replaced = result.replaceAll("\\.",",");
+            Log.d("RESULT2",replaced);
+            resultDisplay.setText("= " + replaced);
+            ans = result;
+            Log.d("ANS",ans);
         }
     }
 
