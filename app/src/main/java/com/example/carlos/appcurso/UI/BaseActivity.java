@@ -134,7 +134,17 @@ public class BaseActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            currentFragment = new Calculator();
+            android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragmentContainer, currentFragment);
+            fragmentTransaction.commit();
+        } else if(id == R.id.nav_music_player) {
+            currentFragment = new MusicPlayer();
+            android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragmentContainer, currentFragment);
+            fragmentTransaction.commit();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

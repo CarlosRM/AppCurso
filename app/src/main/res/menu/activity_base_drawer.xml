@@ -6,6 +6,10 @@
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_menu_camera"
             android:title="Calculator" />
+        <item
+            android:id="@+id/nav_music_player"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Music player" />
     </group>
 
     <item android:title="Communicate">
