@@ -18,12 +18,15 @@ import android.view.MenuItem;
 
 import com.example.carlos.appcurso.R;
 
+import java.util.ArrayList;
+
 public class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     NavigationView navigationView;
     Toolbar toolbar;
     Fragment currentFragment;
+    String currentTag;
     SharedPreferences settings;
 
     @Override
@@ -33,14 +36,16 @@ public class BaseActivity extends AppCompatActivity
         initializeViews();
 
         if (savedInstanceState != null) {
-            currentFragment = getSupportFragmentManager().getFragment(savedInstanceState, "fragment");
+            currentFragment = getSupportFragmentManager().getFragment(savedInstanceState, "currentFragment");
+            currentTag = savedInstanceState.getString("currentTag");
         } else {
             Calculator calculator = new Calculator();
             currentFragment = calculator;
+            currentTag = "Calculator";
         }
         android.support.v4.app.FragmentTransaction fragmentTransaction =
                 getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentContainer, currentFragment);
+        fragmentTransaction.replace(R.id.fragmentContainer, currentFragment, currentTag);
         fragmentTransaction.commit();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -62,9 +67,9 @@ public class BaseActivity extends AppCompatActivity
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        getSupportFragmentManager().putFragment(outState,"currentFragment",currentFragment);
+        outState.putString("currentTag",currentTag);
 
-        //Save the fragment's instance
-        getSupportFragmentManager().putFragment(outState, "fragment", currentFragment);
     }
 
     @Override
@@ -134,16 +139,34 @@ public class BaseActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            currentFragment = new Calculator();
+
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragmentContainer, currentFragment);
+            Fragment calculatorFragment = getSupportFragmentManager().findFragmentByTag("Calculator");
+            if(calculatorFragment!=null) {
+                Log.d("FOUNDCALCULATOR","FOUNDCALCULATOR");
+                currentFragment = calculatorFragment;
+            } else {
+                currentFragment = new Calculator();
+            }
+            currentTag = "Calculator";
+            fragmentTransaction.replace(R.id.fragmentContainer,currentFragment,currentTag);
+            fragmentTransaction.addToBackStack(currentTag);
             fragmentTransaction.commit();
         } else if(id == R.id.nav_music_player) {
-            currentFragment = new MusicPlayer();
+
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragmentContainer, currentFragment);
+            Fragment musicFragment = getSupportFragmentManager().findFragmentByTag("MusicPlayer");
+            if(musicFragment != null){
+                Log.d("FOUNDMUSIC","FOUNDMUSIC");
+                currentFragment = musicFragment;
+            } else {
+                currentFragment = new MusicPlayer();
+            }
+            currentTag = "MusicPlayer";
+            fragmentTransaction.replace(R.id.fragmentContainer,currentFragment,currentTag);
+            fragmentTransaction.addToBackStack(currentTag);
             fragmentTransaction.commit();
         } else if (id == R.id.nav_share) {
 

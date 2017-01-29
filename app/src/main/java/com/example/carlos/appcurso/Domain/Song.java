@@ -11,6 +11,7 @@ public class Song {
     private String album;
     private String artist;
     private String albumCover;
+    private long duration;
     private long songID;
 
     public Song () {
@@ -47,6 +48,14 @@ public class Song {
 
     public void setAlbumCover(String albumCover) {
         this.albumCover = albumCover;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
     }
 
     public long getSongID() {

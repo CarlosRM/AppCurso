@@ -20,7 +20,8 @@
             </intent-filter>
 
         </activity>
-        <service android:name="com.example.carlos.appcurso.Domain.MusicService"/>
+        <service android:name="com.example.carlos.appcurso.Domain.MusicService" android:enabled="true">
+        </service>
     </application>
 
 </manifest>
