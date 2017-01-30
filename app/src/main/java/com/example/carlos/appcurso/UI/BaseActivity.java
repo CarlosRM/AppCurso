@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.carlos.appcurso.R;
 
@@ -30,6 +31,59 @@ public class BaseActivity extends AppCompatActivity
     SharedPreferences settings;
 
     @Override
+    public void onNewIntent(Intent intent) {
+        /*String fromNotification = intent.getStringExtra("fragmentToOpen");
+        if(fromNotification != null) {
+            Log.d("GOTINTENT2","GOTINTENT2");
+            Fragment playerFragment = getSupportFragmentManager().findFragmentByTag("MusicPlayer");
+            if(playerFragment!=null){
+                currentFragment = playerFragment;
+                currentTag = "MusicPlayer";
+                android.support.v4.app.FragmentTransaction fragmentTransaction =
+                        getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentContainer,currentFragment,currentTag);
+                fragmentTransaction.addToBackStack(currentTag);
+                fragmentTransaction.commit();
+            }
+        }*/
+        //String fromNotification = intent.getStringExtra("fragmentToOpen");
+        //Toast.makeText(this,fromNotification,Toast.LENGTH_SHORT).show();
+        setIntent(intent);
+    }
+
+    @Override
+    public  void onResume(){
+        String fromNotification = getIntent().getStringExtra("fragmentToOpen");
+        if(fromNotification!=null && fromNotification.equals("MusicPlayer")) {
+            Fragment playerFragment = getSupportFragmentManager().findFragmentByTag("MusicPlayer");
+            if(playerFragment!=null){
+                currentFragment = playerFragment;
+                currentTag = "MusicPlayer";
+                android.support.v4.app.FragmentTransaction fragmentTransaction =
+                        getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentContainer,currentFragment,currentTag);
+                fragmentTransaction.addToBackStack(currentTag);
+                fragmentTransaction.commit();
+                navigationView.setCheckedItem(R.id.nav_music_player);
+            } else {
+                MusicPlayer musicF = new MusicPlayer();
+                musicF.setCurrentIndex(getIntent().getIntExtra("currentIndex",0));
+                musicF.setIsPlaying(getIntent().getBooleanExtra("isPlaying",false));
+                currentFragment = musicF;
+                currentTag = "MusicPlayer";
+                android.support.v4.app.FragmentTransaction fragmentTransaction =
+                        getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentContainer,currentFragment,currentTag);
+                fragmentTransaction.addToBackStack(currentTag);
+                fragmentTransaction.commit();
+                navigationView.setCheckedItem(R.id.nav_music_player);
+            }
+            getIntent().removeExtra("fragmentToOpen");
+        }
+        super.onResume();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
@@ -43,6 +97,17 @@ public class BaseActivity extends AppCompatActivity
             currentFragment = calculator;
             currentTag = "Calculator";
         }
+
+        /*String fromNotification = getIntent().getStringExtra("fragmentToOpen");
+        if(fromNotification != null) {
+            Log.d("GOTINTENT","GOTINTENT");
+            Fragment playerFragment = getSupportFragmentManager().findFragmentByTag("MusicPlayer");
+            if(playerFragment!=null){
+                currentFragment = playerFragment;
+                currentTag = "MusicPlayer";
+            }
+        }*/
+
         android.support.v4.app.FragmentTransaction fragmentTransaction =
                 getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainer, currentFragment, currentTag);
@@ -78,7 +143,11 @@ public class BaseActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            Intent startMain = new Intent(Intent.ACTION_MAIN);
+            startMain.addCategory(Intent.CATEGORY_HOME);
+            startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(startMain);
+            //super.onBackPressed();
         }
     }
 

@@ -49,7 +49,7 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
     SeekBar songSeekBar;
     TextView currentTime;
     TextView totalTime;
-    int currentIndex;
+    int currentIndex = 0;
     ArrayList<Song> songList;
     View v;
     TextView songTitle;
@@ -60,8 +60,7 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
     ImageView nextButton;
     ImageView previousButton;
 
-    boolean isPlaying;
-
+    boolean isPlaying = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,8 +84,10 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
                 currentIndex = savedInstanceState.getInt("currentIndex");
                 songStarted = savedInstanceState.getBoolean("songStarted");
                 isPlaying = savedInstanceState.getBoolean("isPlaying");
+                currentTime.setText(savedInstanceState.getString("currentTime"));
                 updateUI();
             }
+            updateUI();
         }
 
         //v = inflater.inflate(R.layout.fragment_music_player, container, false);
@@ -121,6 +122,14 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
         }
     };
 
+    public void setCurrentIndex (int currentIndex) {
+        this.currentIndex = currentIndex;
+    }
+
+    public void setIsPlaying (boolean isPlaying) {
+        this.isPlaying = isPlaying;
+    }
+
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.call_button);
@@ -147,7 +156,7 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
     }
 
     public void setPosition(int position) {
-        musicService.setPosition(position);
+        if(musicService!=null) musicService.setPosition(position);
     }
 
     public int getPosition() {
@@ -155,9 +164,9 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
     }
 
     private void initializeViews() {
-        isPlaying = false;
+        //isPlaying = false;
         songStarted = false;
-        currentIndex = 0;
+        //currentIndex = 0;
         songList = new ArrayList<>();
         ContentResolver cr = getActivity().getContentResolver();
 
@@ -214,7 +223,7 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
             songSeekBar.setProgress(getPosition());
             currentTime.setText(msToMin(getPosition()));
         }
-        handler.postDelayed(this,15);
+        handler.postDelayed(this,1);
     }
 
     private String msToMin (long ms) {
@@ -240,6 +249,7 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
         outstate.putBoolean("songStarted",songStarted);
         outstate.putBoolean("isPlaying",isPlaying);
         outstate.putInt("currentIndex",currentIndex);
+        outstate.putString("currentTime",currentTime.getText().toString());
     }
 
     private void setListeners() {
@@ -255,20 +265,16 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
                     if(i == songList.get(currentIndex).getDuration()) {
                         if(isPlaying) {
                             playButton.setImageResource(R.drawable.ic_play_button);
-                            isPlaying = !isPlaying;
+                            isPlaying = false;
                         }
                     }
-                } else if(i == songList.get(currentIndex).getDuration()) {
-                    if(currentIndex < songList.size()-1){
+                } else if(i >= songList.get(currentIndex).getDuration()-500) {
+                    if(currentIndex < songList.size()-1 && isPlaying){
                         setPosition(0);
                         ++currentIndex;
                         updateUI();
-                        if(isPlaying) {
-                            play();
-
-                            songStarted = true;
-                        }
-
+                        play();
+                        songStarted = true;
                     }
                 }
             }
@@ -286,6 +292,7 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
     }
 
     private void updateUI(){
+        Log.d("ISPLAYING",isPlaying+"");
         songTitle.setText(songList.get(currentIndex).getTitle());
         artistName.setText(songList.get(currentIndex).getArtist());
         albumTitle.setText(songList.get(currentIndex).getAlbum());
@@ -328,6 +335,7 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
             case R.id.play:
                 if(!isPlaying){
                     playButton.setImageResource(R.drawable.ic_pause_button);
+                    isPlaying=!isPlaying;
                     if(songSeekBar.getProgress() == songList.get(currentIndex).getDuration()) {
                         setPosition(0);
                         ++currentIndex;
@@ -342,13 +350,12 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
                             resume();
                         }
                     }
-
-
                 }else{
+                    isPlaying = !isPlaying;
                     playButton.setImageResource(R.drawable.ic_play_button);
+                    songStarted = true;
                     pause();
                 }
-                isPlaying = !isPlaying;
                 break;
             case R.id.next_song:
                 if(currentIndex < songList.size()-1){
@@ -364,7 +371,7 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
                 }
                 break;
             case R.id.previous_song:
-                if(songStarted) {
+                //if(songStarted) {
                     if(getPosition()>1500 && isPlaying) {
                         setPosition(0);
                     }
@@ -380,7 +387,7 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
                             songStarted = false;
                         }
                     }
-                } else {
+                /*} else {
                     if (currentIndex > 0) {
                         setPosition(0);
                         --currentIndex;
@@ -392,7 +399,7 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
                             songStarted = false;
                         }
                     }
-                }
+                }*/
                 break;
         }
     }

@@ -1,8 +1,14 @@
 package com.example.carlos.appcurso.Domain;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -11,6 +17,9 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
+
+import com.example.carlos.appcurso.R;
+import com.example.carlos.appcurso.UI.BaseActivity;
 
 import java.util.ArrayList;
 
@@ -28,12 +37,20 @@ MediaPlayer.OnErrorListener,MediaPlayer.OnCompletionListener {
     private final IBinder musicBind = new MusicBinder();
     boolean prepared = false;
     boolean initialized = false;
+    /*private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Intent playIntent = new Intent(getApplicationContext(),MusicService.class);
+            stopService(playIntent);
+            unregisterReceiver(this);
+        }
+    };*/
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
-        return START_STICKY;
+        return START_NOT_STICKY;
     }
 
     public void onCreate() {
@@ -42,7 +59,6 @@ MediaPlayer.OnErrorListener,MediaPlayer.OnCompletionListener {
         player = new MediaPlayer();
         initializeMusicPlayer();
         initialized = true;
-
     }
 
     public void initializeMusicPlayer() {
@@ -87,14 +103,54 @@ MediaPlayer.OnErrorListener,MediaPlayer.OnCompletionListener {
         }
         player.prepareAsync();
         prepared = true;
+        //Intent intent = new Intent("NOTIFICATION_DELETED");
+        //PendingIntent pendintIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+
     }
 
     public void pauseSong() {
-        if(player != null) player.pause();
+        if(player != null) {
+            stopForeground(false);
+            player.pause();
+            /*Song currentSong = songList.get(songIndex);
+            Intent notificationIntent = new Intent(this, BaseActivity.class);
+            notificationIntent.putExtra("fragmentToOpen","MusicPlayer");
+            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            Notification notification = new Notification.Builder(getApplicationContext())
+                    .setContentTitle("Now playing")
+                    .setContentText(currentSong.getTitle() + " - " + currentSong.getArtist())
+                    .setSmallIcon(R.drawable.ic_song_notification)
+                    .setWhen(System.currentTimeMillis())
+                    .setContentIntent(pendingIntent)
+                    .build();*/
+
+        }
     }
 
     public void resumeSong() {
-        if(player!=null) player.start();
+        if(player!=null) {
+            player.start();
+            Song currentSong = songList.get(songIndex);
+            //Intent intent = new Intent("NOTIFICATION_DELETED");
+            //PendingIntent pendintIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+
+            Intent notificationIntent = new Intent(this, BaseActivity.class);
+            notificationIntent.putExtra("fragmentToOpen","MusicPlayer");
+            notificationIntent.putExtra("currentIndex",songIndex);
+            notificationIntent.putExtra("isPlaying",player.isPlaying());
+            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            //registerReceiver(receiver, new IntentFilter("NOTIFICATION_DELETED"));
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            Notification notification = new Notification.Builder(getApplicationContext())
+                    .setContentTitle("Now playing")
+                    .setContentText(currentSong.getTitle() + " - " + currentSong.getArtist())
+                    .setSmallIcon(R.drawable.ic_song_notification)
+                    .setWhen(System.currentTimeMillis())
+                    .setContentIntent(pendingIntent)
+                    .build();
+            startForeground(2048, notification);
+        }
     }
     public int getPosition() {
         if(player!=null && prepared) {
@@ -139,7 +195,6 @@ MediaPlayer.OnErrorListener,MediaPlayer.OnCompletionListener {
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
-
     }
 
     @Override
@@ -151,6 +206,22 @@ MediaPlayer.OnErrorListener,MediaPlayer.OnCompletionListener {
     public void onPrepared(MediaPlayer mediaPlayer) {
         player.seekTo(currentPosition);
         player.start();
+        Song currentSong = songList.get(songIndex);
+        Intent notificationIntent = new Intent(this, BaseActivity.class);
+        notificationIntent.putExtra("fragmentToOpen","MusicPlayer");
+        notificationIntent.putExtra("currentIndex",songIndex);
+        notificationIntent.putExtra("isPlaying",player.isPlaying());
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        //registerReceiver(receiver, new IntentFilter("NOTIFICATION_DELETED"));
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Notification notification = new Notification.Builder(getApplicationContext())
+                .setContentTitle("Now playing")
+                .setContentText(currentSong.getTitle() + " - " + currentSong.getArtist())
+                .setSmallIcon(R.drawable.ic_song_notification)
+                .setWhen(System.currentTimeMillis())
+                .setContentIntent(pendingIntent)
+                .build();
+        startForeground(2048, notification);
     }
 
     @Override
