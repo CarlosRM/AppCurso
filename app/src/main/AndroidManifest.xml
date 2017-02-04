@@ -15,6 +15,15 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleInstance">
 
+
+
+        </activity>
+
+        <activity
+            android:name=".UI.Login"
+            android:label="LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -23,6 +32,10 @@
         </activity>
         <service android:name="com.example.carlos.appcurso.Domain.MusicService" android:enabled="true">
         </service>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="a79ac13fd0e3fea92f5b15caf9ad1b8958571ced" />
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

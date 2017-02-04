@@ -3,6 +3,7 @@ package com.example.carlos.appcurso.UI;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -63,6 +64,10 @@ public class Calculator extends Fragment implements View.OnClickListener{
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        getActivity().setRequestedOrientation(
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.fragment_calculator);
         v = inflater.inflate(R.layout.fragment_calculator,container,false);

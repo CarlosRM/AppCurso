@@ -10,6 +10,14 @@
             android:id="@+id/nav_music_player"
             android:icon="@drawable/ic_menu_camera"
             android:title="Music player" />
+        <item
+            android:id="@+id/nav_ranking"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Ranking" />
+        <item
+            android:id="@+id/nav_memory"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Memory" />
     </group>
 
     <item android:title="Communicate">
