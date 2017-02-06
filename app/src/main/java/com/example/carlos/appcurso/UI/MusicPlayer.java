@@ -102,18 +102,8 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
             updateUI();
         }
 
-        //v = inflater.inflate(R.layout.fragment_music_player, container, false);
         setHasOptionsMenu(true);
         getActivity().setTitle("Music player");
-        //initializeViews();
-        //run();
-        //setListeners();
-        /*if(savedInstanceState!=null) {
-            currentIndex = savedInstanceState.getInt("currentIndex");
-            songStarted = savedInstanceState.getBoolean("songStarted");
-            isPlaying = savedInstanceState.getBoolean("isPlaying");
-            updateUI();
-        }*/
         canUnbind = true;
         return v;
     }
@@ -155,7 +145,6 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
 
    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //super.onOptionsItemSelected(item);
         int id = item.getItemId();
         if (id == R.id.logout_icon) {
             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -439,19 +428,6 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
                             songStarted = false;
                         }
                     }
-                /*} else {
-                    if (currentIndex > 0) {
-                        setPosition(0);
-                        --currentIndex;
-                        updateUI();
-                        if (isPlaying) {
-                            play();
-                            songStarted = true;
-                        } else {
-                            songStarted = false;
-                        }
-                    }
-                }*/
                 break;
         }
     }

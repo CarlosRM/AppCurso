@@ -55,7 +55,6 @@ public class Memory6 extends Fragment implements View.OnClickListener {
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.fragment_calculator);
         v = inflater.inflate(R.layout.fragment_memory_6x6,container,false);
         setHasOptionsMenu(true);
         getActivity().setTitle("Memory");
@@ -242,7 +241,6 @@ public class Memory6 extends Fragment implements View.OnClickListener {
         if(canFlip){
             oneFlipped = !oneFlipped;
             flipper.flipImage(getResources().getDrawable(imageArray[aux]),cardArray.get(aux));
-            //cardArray.get(aux).setImageResource(imageArray[aux]);
             if (oneFlipped) {
                 lastFlipped = aux;
                 lastFlippedImage = imageArray[aux];
@@ -260,8 +258,6 @@ public class Memory6 extends Fragment implements View.OnClickListener {
                         public void run() {
                             flipper.flipImage(getResources().getDrawable(R.drawable.cardback),cardArray.get(aux));
                             flipper.flipImage(getResources().getDrawable(R.drawable.cardback),cardArray.get(lastFlipped));
-                            //cardArray.get(aux).setImageResource(R.drawable.cardback);
-                            //cardArray.get(lastFlipped).setImageResource(R.drawable.cardback);
                             canFlip = true;
                         }
                     };
@@ -283,14 +279,12 @@ public class Memory6 extends Fragment implements View.OnClickListener {
                             case DialogInterface.BUTTON_POSITIVE:
                                 for(int i = 0;i < 36;++i){
                                     flipper.flipImage(getResources().getDrawable(R.drawable.cardback),cardArray.get(i));
-                                    //cardArray.get(i).setImageResource(R.drawable.cardback);
                                 }
                                 createTable();
                                 initializeViews();
                                 setListeners();
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:
-                                //No button clicked
                                 break;
                         }
                     }

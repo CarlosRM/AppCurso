@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AppCurso</string>
+    <string name="app_name">Jack of All Trades</string>
     <string name="divide_button">÷</string>
     <string name="multiply_button">×</string>
     <string name="subs_button">-</string>
@@ -38,9 +38,9 @@
 
     <string name="memory">Memory</string>
     <string name="memory_help">The classical game of making pairs, you know what to do. Select 4x4
-        if you are a noob or 6x6 if you wanna brag in front of the ladies (seriously tho? Good luck with that :D)\n\n
-        If you are failing too hard you can press the restart button and start all over for free, no penalty. We
-        won\'t even make you watch any ads. Awesome right? That\\'s if you want to play more than once of course,
+        if you are a noob or 6x6 if you wanna brag in front of the ladies (seriously tho? Good luck with that)\n\nIf
+        you are failing too hard you can press the restart button and start all over for free, no penalty. We
+        won\'t even make you watch any ads. Awesome right? That\'s if you want to play more than once of course,
         let\'s not pretend it\'s not boring as hell.</string>
 
     <string name="ranking">Ranking</string>
@@ -48,7 +48,7 @@
         Memory\'s best score against the scores of the other people. Quite sad, really. Oh, and did I mention these
         other people are default database registers? Because this thing has no online features, so unless you and your
         friends take turns to play on the same phone (come on...), good luck beating Ana\'s 12 movements in the 6x6 mode.
-        Yeah, we cheat.\n\n You can Restart the ranking and then play a game and you\'ll be on top.
+        Yeah, we cheat.\n\nYou can Restart the ranking and then play a game and you\'ll be on top.
         Yeah, good job buddy, you made it. Geez.</string>
 
     <string name="music_player">Music Player</string>

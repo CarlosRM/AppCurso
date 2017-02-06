@@ -42,10 +42,9 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(USER_TABLE_CREATE);
         db.execSQL("INSERT into " + USER_TABLE_NAME + " (user, points4, points6,toast,status) VALUES ('Carlos',13,14,0,0)");
-        db.execSQL("INSERT into " + USER_TABLE_NAME + " (user, points4, points6,toast,status) VALUES ('Ana',12,15,0,0)");
+        db.execSQL("INSERT into " + USER_TABLE_NAME + " (user, points4, points6,toast,status) VALUES ('Ana',12,12,0,0)");
         db.execSQL("INSERT into " + USER_TABLE_NAME + " (user, points4, points6,toast,status) VALUES ('Jordi',26,28,0,0)");
         db.execSQL("INSERT into " + USER_TABLE_NAME + " (user, points4, points6,toast,status) VALUES ('Juanmi',18,27,0,0)");
-        db.execSQL("INSERT into " + USER_TABLE_NAME + " (user, points4, points6,toast,status) VALUES ('3',0,0,0,0)");
     }
 
     @Override
@@ -53,10 +52,9 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE_NAME + ";");
         db.execSQL(USER_TABLE_CREATE);
         db.execSQL("INSERT into " + USER_TABLE_NAME + " (user, points4, points6,toast,status) VALUES ('Carlos',13,14,0,0)");
-        db.execSQL("INSERT into " + USER_TABLE_NAME + " (user, points4, points6,toast,status) VALUES ('Ana',12,15,0,0)");
+        db.execSQL("INSERT into " + USER_TABLE_NAME + " (user, points4, points6,toast,status) VALUES ('Ana',12,12,0,0)");
         db.execSQL("INSERT into " + USER_TABLE_NAME + " (user, points4, points6,toast,status) VALUES ('Jordi',26,27,0,0)");
         db.execSQL("INSERT into " + USER_TABLE_NAME + " (user, points4, points6,toast,status) VALUES ('Juanmi',18,36,0,0)");
-        db.execSQL("INSERT into " + USER_TABLE_NAME + " (user, points4, points6,toast,status) VALUES ('3',0,0,0,0)");
     }
 
     public List<User> getUsers(SQLiteDatabase db, String order) {

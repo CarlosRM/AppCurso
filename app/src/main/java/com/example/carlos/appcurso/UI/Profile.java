@@ -113,12 +113,10 @@ public class Profile extends Fragment implements View.OnClickListener{
                     e.printStackTrace();
                 }
                 for (int i = 0; i < l.size(); ++i) {
-                    Log.v("LOG", l.get(i).getAddressLine(0).toString());
                     TextView t = (TextView) v.findViewById(R.id.location);
                     if(i==0) t.setText("");
                     t.setText(t.getText()+"\n"+l.get(i).getAddressLine(0).toString());
                 }
-                Log.v("LOG", ((Double) location.getLatitude()).toString());
             }
         };
         if(Build.VERSION.SDK_INT >= 23) {
@@ -172,7 +170,7 @@ public class Profile extends Fragment implements View.OnClickListener{
 
         aux = helper.getUserPoints(database,user,"points6");
         if(aux == -1) points6.setText("N/A");
-        points6.setText(Integer.toString(aux));
+        else points6.setText(Integer.toString(aux));
     }
 
     private void setListeners(){
@@ -206,13 +204,6 @@ public class Profile extends Fragment implements View.OnClickListener{
                             startActivityForResult(takePicture, TAKE_PICTURE);//zero can be replaced with any action code
                             break;
                         case 1:
-                            /*Intent intent = new Intent();
-                            if(Build.VERSION.SDK_INT >= 19){
-                                intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                            } else intent = new Intent(Intent.ACTION_GET_CONTENT);
-                            intent.setType("image/*");
-                            intent.setAction(Intent.ACTION_GET_CONTENT);
-                            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);*/
                             Intent pickIntent;
                             if(Build.VERSION.SDK_INT >= 19){
                                 pickIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
@@ -257,20 +248,14 @@ public class Profile extends Fragment implements View.OnClickListener{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Check which request we're responding to
         if (requestCode == PICK_IMAGE) {
-            // Make sure the request was successful
             if (resultCode == RESULT_OK) {
-                // The user picked a contact.
-                // The Intent's data Uri identifies which contact was selected.
                 Uri imageUri = data.getData();
                 Picasso.with(getActivity()).load(imageUri).resize(300,300).centerCrop().into(profilePic);
                 helper.updateImage(database,currentUser.getName(),imageUri.toString());
-                // Do something with the contact here (bigger example below)
             }
         } else if (requestCode == TAKE_PICTURE) {
             if(resultCode == RESULT_OK){
-                Log.d("HERE","HERE");
                 Uri imageUri = data.getData();
                 Picasso.with(getActivity()).load(imageUri).resize(300,300).centerCrop().into(profilePic);
                 helper.updateImage(database,currentUser.getName(),imageUri.toString());

@@ -24,9 +24,10 @@
 
         <activity
             android:name=".UI.Login"
-            android:label="LoginActivity"
+            android:label="Jack of All Trades"
             android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleInstance"
+            android:icon="@drawable/gaming_joker_icon"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

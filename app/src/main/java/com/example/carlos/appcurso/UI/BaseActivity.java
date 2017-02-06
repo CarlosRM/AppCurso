@@ -61,23 +61,6 @@ public class BaseActivity extends AppCompatActivity
 
     @Override
     public void onNewIntent(Intent intent) {
-        /*String fromNotification = intent.getStringExtra("fragmentToOpen");
-        if(fromNotification != null
-        ) {
-            Log.d("GOTINTENT2","GOTINTENT2");
-            Fragment playerFragment = getSupportFragmentManager().findFragmentByTag("MusicPlayer");
-            if(playerFragment!=null){
-                currentFragment = playerFragment;
-                currentTag = "MusicPlayer";
-                android.support.v4.app.FragmentTransaction fragmentTransaction =
-                        getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentContainer,currentFragment,currentTag);
-                fragmentTransaction.addToBackStack(currentTag);
-                fragmentTransaction.commit();
-            }
-        }*/
-        //String fromNotification = intent.getStringExtra("fragmentToOpen");
-        //Toast.makeText(this,fromNotification,Toast.LENGTH_SHORT).show();
         setIntent(intent);
     }
 
@@ -141,23 +124,10 @@ public class BaseActivity extends AppCompatActivity
             currentFragment = getSupportFragmentManager().getFragment(savedInstanceState, "currentFragment");
             currentTag = savedInstanceState.getString("currentTag");
         } else {
-            /*Calculator calculator = new Calculator();
-            currentFragment = calculator;
-            currentTag = "Calculator";*/
             Help help = new Help();
             currentFragment = help;
             currentTag = "Help";
         }
-
-        /*String fromNotification = getIntent().getStringExtra("fragmentToOpen");
-        if(fromNotification != null) {
-            Log.d("GOTINTENT","GOTINTENT");
-            Fragment playerFragment = getSupportFragmentManager().findFragmentByTag("MusicPlayer");
-            if(playerFragment!=null){
-                currentFragment = playerFragment;
-                currentTag = "MusicPlayer";
-            }
-        }*/
 
         android.support.v4.app.FragmentTransaction fragmentTransaction =
                 getSupportFragmentManager().beginTransaction();
@@ -229,13 +199,12 @@ public class BaseActivity extends AppCompatActivity
             startMain.addCategory(Intent.CATEGORY_HOME);
             startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(startMain);
-            //super.onBackPressed();
+
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.base, menu);
         settings = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         Log.d("PREMENU",Boolean.toString(settings.getBoolean("toast",false)));
@@ -247,9 +216,7 @@ public class BaseActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
         settings = getSharedPreferences("Preferences", 0);
         SharedPreferences.Editor editor = settings.edit();
@@ -301,7 +268,6 @@ public class BaseActivity extends AppCompatActivity
                             finish();
                             break;
                         case DialogInterface.BUTTON_NEGATIVE:
-                            //No button clicked
                             break;
                     }
                 }
@@ -314,10 +280,8 @@ public class BaseActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    //@SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
@@ -326,14 +290,12 @@ public class BaseActivity extends AppCompatActivity
                     getSupportFragmentManager().beginTransaction();
             Fragment calculatorFragment = getSupportFragmentManager().findFragmentByTag("Calculator");
             if(calculatorFragment!=null) {
-                Log.d("FOUNDCALCULATOR","FOUNDCALCULATOR");
                 currentFragment = calculatorFragment;
             } else {
                 currentFragment = new Calculator();
             }
             currentTag = "Calculator";
             fragmentTransaction.replace(R.id.fragmentContainer,currentFragment,currentTag);
-            //fragmentTransaction.addToBackStack(currentTag);
             fragmentTransaction.commit();
         } else if(id == R.id.nav_music_player) {
 
@@ -341,38 +303,21 @@ public class BaseActivity extends AppCompatActivity
                     getSupportFragmentManager().beginTransaction();
             Fragment musicFragment = getSupportFragmentManager().findFragmentByTag("MusicPlayer");
             if(musicFragment != null){
-                Log.d("FOUNDMUSIC","FOUNDMUSIC");
                 currentFragment = musicFragment;
             } else {
                 currentFragment = new MusicPlayer();
             }
             currentTag = "MusicPlayer";
             fragmentTransaction.replace(R.id.fragmentContainer,currentFragment,currentTag);
-            //fragmentTransaction.addToBackStack(currentTag);
             fragmentTransaction.commit();
         } else if(id == R.id.nav_ranking) {
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
-            /*Fragment rankingFragment = getSupportFragmentManager().findFragmentByTag("RankingContainer");
-            if(rankingFragment != null){
-                currentFragment = rankingFragment;
-            } else {
-                currentFragment = new RankingContainer();
-            }
-            currentTag = "RankingContainer";*/
             currentFragment = new RankingContainer();
             currentTag = "RankingContainer";
             fragmentTransaction.replace(R.id.fragmentContainer, currentFragment, currentTag);
-            //fragmentTransaction.addToBackStack(currentTag);
             fragmentTransaction.commit();
         } else if (id == R.id.nav_memory) {
-            /*android.support.v4.app.FragmentTransaction fragmentTransaction =
-                    getSupportFragmentManager().beginTransaction();
-            currentFragment = new Memory6();
-            currentTag = "Memory";
-            fragmentTransaction.replace(R.id.fragmentContainer, currentFragment, currentTag);
-            //fragmentTransaction.addToBackStack(currentTag);
-            fragmentTransaction.commit();*/
             CharSequence colors[] = new CharSequence[]{"4x4", "6x6"};
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -402,17 +347,9 @@ public class BaseActivity extends AppCompatActivity
         } else if (id == R.id.nav_profile) {
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
-            /*Fragment rankingFragment = getSupportFragmentManager().findFragmentByTag("RankingContainer");
-            if(rankingFragment != null){
-                currentFragment = rankingFragment;
-            } else {
-                currentFragment = new RankingContainer();
-            }
-            currentTag = "RankingContainer";*/
             currentFragment = new Profile();
             currentTag = "Profile";
             fragmentTransaction.replace(R.id.fragmentContainer, currentFragment, currentTag);
-            //fragmentTransaction.addToBackStack(currentTag);
             fragmentTransaction.commit();
         } else if (id == R.id.nav_help) {
             android.support.v4.app.FragmentTransaction fragmentTransaction =

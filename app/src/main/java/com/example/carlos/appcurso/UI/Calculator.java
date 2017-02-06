@@ -73,7 +73,6 @@ public class Calculator extends Fragment implements View.OnClickListener{
                 ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.fragment_calculator);
         v = inflater.inflate(R.layout.fragment_calculator,container,false);
         setHasOptionsMenu(true);
         getActivity().setTitle("Calculator");
@@ -323,14 +322,12 @@ public class Calculator extends Fragment implements View.OnClickListener{
                         }
                     }
                     else if (auxChar == 's'){
-                        //actualExpression = actualExpression.substring(0,actualExpression.length() - ans.length() );
                         isAns = true;
                         actualExpression = actualExpression.substring(0,actualExpression.length()-1);
                     }
                     else if(auxChar == '+' || auxChar == ')' ||
                             auxChar == '(' || auxChar == ')' || auxChar == '×' || auxChar == '÷'){
                         actualExpression = actualExpression.substring(0,actualExpression.length()-3);
-                        Log.v("ACTUALEXPRESSION",actualExpression);
                     } else {
                         actualExpression = actualExpression.substring(0,actualExpression.length()-1);
                     }
@@ -367,8 +364,6 @@ public class Calculator extends Fragment implements View.OnClickListener{
                 Intent notificationIntent = new Intent(getActivity(), BaseActivity.class);
                 notificationIntent.putExtra("fragmentToOpen","Calculator");
                 notificationIntent.putExtra("username",((BaseActivity) getActivity()).getCurrentUser());
-                //notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                //registerReceiver(receiver, new IntentFilter("NOTIFICATION_DELETED"));
                 PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, notificationIntent, 0);
                 Notification notification = new Notification.Builder(getActivity().getApplication().getApplicationContext())
                         .setContentTitle("Error")
@@ -379,7 +374,6 @@ public class Calculator extends Fragment implements View.OnClickListener{
                         .build();
                 NotificationManager mNotificationManager =
                         (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-// mId allows you to update the notification later on.
                 mNotificationManager.notify(1337, notification);
             }
             resultDisplay.setText("");
@@ -410,10 +404,8 @@ public class Calculator extends Fragment implements View.OnClickListener{
             calculator = new FullCalculator();
         } else {
             String replaced = result.replaceAll("\\.",",");
-            Log.d("RESULT2",replaced);
             resultDisplay.setText("= " + replaced);
             ans = result;
-            Log.d("ANS",ans);
         }
     }
 

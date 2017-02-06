@@ -32,8 +32,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     private TwitterLoginButton loginButton;
     private Button guestLoginButton;
 
-    private static final String TWITTER_KEY = "AzDP9maJ0XkOKimPloA1KT9Rr";
-    private static final String TWITTER_SECRET = "omJZYYmEXCyDb9z4i4sGWVMQOGIcBzddyDX0cau1MPmtqfzvk6";
+    //private static final String TWITTER_KEY = "AzDP9maJ0XkOKimPloA1KT9Rr";
+    //private static final String TWITTER_SECRET = "omJZYYmEXCyDb9z4i4sGWVMQOGIcBzddyDX0cau1MPmtqfzvk6";
+    private static final String TWITTER_KEY = "4I7wnMigirauOim3rlEXePF6K";
+    private static final String TWITTER_SECRET = "fuBGAfustzeyeIamhDixY6kmfrvkDgEgqZQKO9iM3To7pYbXt0";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +60,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
-                // The TwitterSession is also available through:
-                // Twitter.getInstance().core.getSessionManager().getActiveSession()
+
                 TwitterSession session = result.data;
-                // with your app's user model
                 String msg = "@" + session.getUserName() + " logged in! (#" + session.getUserId() + ")";
-                //Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
                 SharedPreferences settings = getSharedPreferences("Preferences", 0);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.clear();
@@ -90,8 +90,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // Make sure that the loginButton hears the result from any
-        // Activity that it triggered.
         loginButton.onActivityResult(requestCode, resultCode, data);
     }
 
