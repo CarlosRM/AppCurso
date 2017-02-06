@@ -54,6 +54,10 @@ public class RankingContainer extends Fragment {
         item.setVisible(false);
         item = menu.findItem(R.id.browser_button);
         item.setVisible(false);
+        item = menu.findItem(R.id.restart_memory);
+        item.setVisible(false);
     }
+
+
 
 }

@@ -1,5 +1,8 @@
 package com.example.carlos.appcurso.UI;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +15,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +70,7 @@ public class Calculator extends Fragment implements View.OnClickListener{
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         getActivity().setRequestedOrientation(
-                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.fragment_calculator);
@@ -88,11 +92,11 @@ public class Calculator extends Fragment implements View.OnClickListener{
         return v;
     }
 
-    /*@Override
+    @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        MenuItem item = menu.findItem(R.id.call_button);
+        MenuItem item = menu.findItem(R.id.restart_memory);
         item.setVisible(false);
-    }*/
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -359,8 +363,24 @@ public class Calculator extends Fragment implements View.OnClickListener{
             if(preferences.getBoolean("toast",false)){
                 Toast.makeText(activity,result,Toast.LENGTH_SHORT).show();
             }
-            if(preferences.getBoolean("snackbar",false)){
-                Snackbar.make(v,result,Snackbar.LENGTH_SHORT).show();
+            if(preferences.getBoolean("status",false)){
+                Intent notificationIntent = new Intent(getActivity(), BaseActivity.class);
+                notificationIntent.putExtra("fragmentToOpen","Calculator");
+                notificationIntent.putExtra("username",((BaseActivity) getActivity()).getCurrentUser());
+                //notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                //registerReceiver(receiver, new IntentFilter("NOTIFICATION_DELETED"));
+                PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, notificationIntent, 0);
+                Notification notification = new Notification.Builder(getActivity().getApplication().getApplicationContext())
+                        .setContentTitle("Error")
+                        .setContentText(result)
+                        .setSmallIcon(R.drawable.ic_song_notification)
+                        .setWhen(System.currentTimeMillis())
+                        .setContentIntent(pendingIntent)
+                        .build();
+                NotificationManager mNotificationManager =
+                        (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+// mId allows you to update the notification later on.
+                mNotificationManager.notify(1337, notification);
             }
             resultDisplay.setText("");
             calculator = new FullCalculator();
@@ -368,8 +388,23 @@ public class Calculator extends Fragment implements View.OnClickListener{
             if(preferences.getBoolean("toast",false)){
                 Toast.makeText(activity,"ERROR: Division by zero",Toast.LENGTH_SHORT).show();
             }
-            if(preferences.getBoolean("snackbar",false)){
-                Snackbar.make(v,"ERROR: Division by zero",Snackbar.LENGTH_SHORT).show();
+            if(preferences.getBoolean("status",false)){
+                Intent notificationIntent = new Intent(getActivity(), BaseActivity.class);
+                notificationIntent.putExtra("fragmentToOpen","Calculator");
+                notificationIntent.putExtra("username",((BaseActivity) getActivity()).getCurrentUser());
+
+                PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, notificationIntent, 0);
+                Notification notification = new Notification.Builder(getActivity().getApplication().getApplicationContext())
+                        .setContentTitle("Error")
+                        .setContentText("Division by zero")
+                        .setSmallIcon(R.drawable.ic_song_notification)
+                        .setWhen(System.currentTimeMillis())
+                        .setContentIntent(pendingIntent)
+                        .build();
+                NotificationManager mNotificationManager =
+                        (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+
+                mNotificationManager.notify(1337, notification);
             }
             resultDisplay.setText("");
             calculator = new FullCalculator();
@@ -387,8 +422,21 @@ public class Calculator extends Fragment implements View.OnClickListener{
             if(preferences.getBoolean("toast",false)){
                 Toast.makeText(activity,"Exceeded maximum value length (12)",Toast.LENGTH_SHORT).show();
             }
-            if(preferences.getBoolean("snackbar",false)){
-                Snackbar.make(v,"Exceeded maximum value length (12)",Snackbar.LENGTH_SHORT).show();
+            if(preferences.getBoolean("status",false)){
+                Intent notificationIntent = new Intent(getActivity(), BaseActivity.class);
+                notificationIntent.putExtra("fragmentToOpen","Calculator");
+                notificationIntent.putExtra("username",((BaseActivity) getActivity()).getCurrentUser());
+                PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, notificationIntent, 0);
+                Notification notification = new Notification.Builder(getActivity().getApplication().getApplicationContext())
+                        .setContentTitle("Error")
+                        .setContentText("Exceeded maximum value length (12)")
+                        .setSmallIcon(R.drawable.ic_song_notification)
+                        .setWhen(System.currentTimeMillis())
+                        .setContentIntent(pendingIntent)
+                        .build();
+                NotificationManager mNotificationManager =
+                        (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.notify(1337, notification);
             }
         } else {
             String properAns = expressionDisplay.getText().toString();

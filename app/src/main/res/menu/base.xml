@@ -9,10 +9,10 @@
             android:checked="true"
             app:showAsAction="never" />
         <item
-            android:id="@+id/action_snackbar"
+            android:id="@+id/action_status"
             android:orderInCategory="100"
             android:checked="true"
-            android:title="@string/snackbar_notifications"
+            android:title="@string/status_notifications"
             app:showAsAction="never" />
     </group>
 
@@ -29,4 +29,18 @@
         android:title="Call"
         android:icon="@drawable/ic_call_white_18dp"
         app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/restart_memory"
+        android:orderInCategory="100"
+        android:title="Restart"
+        android:icon="@drawable/ic_autorenew_white_18dp"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/logout_icon"
+        android:orderInCategory="100"
+        android:title="Logout"
+        android:icon="@drawable/ic_power_settings_new_white_18dp"
+        app:showAsAction="always"/>
+
 </menu>

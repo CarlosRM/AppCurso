@@ -1,16 +1,21 @@
 package com.example.carlos.appcurso.UI;
 
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.icu.text.AlphabeticIndex;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.carlos.appcurso.Data.DBHelper;
+import com.example.carlos.appcurso.Domain.CoolImageFlipper;
 import com.example.carlos.appcurso.R;
 
 import java.util.ArrayList;
@@ -46,6 +52,7 @@ public class Memory extends Fragment implements View.OnClickListener {
 
     SQLiteDatabase database;
     DBHelper helper;
+    CoolImageFlipper flipper;
 
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -81,6 +88,7 @@ public class Memory extends Fragment implements View.OnClickListener {
     }
 
     private void initializeViews() {
+        flipper = new CoolImageFlipper(getActivity());
         username = ((BaseActivity) getActivity()).getCurrentUser();
         helper = new DBHelper(getActivity());
         database = helper.getReadableDatabase();
@@ -157,12 +165,54 @@ public class Memory extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.browser_button);
+        item.setVisible(false);
+        item = menu.findItem(R.id.call_button);
+        item.setVisible(false);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.restart_memory:
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                for(int i = 0;i < 16;++i){
+                                    flipper.flipImage(getResources().getDrawable(R.drawable.cardback),cardArray.get(i));
+                                    //cardArray.get(i).setImageResource(R.drawable.cardback);
+                                }
+                                createTable();
+                                initializeViews();
+                                setListeners();
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Are you sure you want to restart?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onClick(View view) {
         final int aux = translate(view.getId());
         if(canFlip){
             cardArray.get(aux).setOnClickListener(null);
             oneFlipped = !oneFlipped;
-            cardArray.get(aux).setImageResource(imageArray[aux]);
+            flipper.flipImage(getResources().getDrawable(imageArray[aux]),cardArray.get(aux));
+            //cardArray.get(aux).setImageResource(imageArray[aux]);
             if (oneFlipped) {
                 lastFlipped = aux;
                 lastFlippedImage = imageArray[aux];
@@ -180,8 +230,10 @@ public class Memory extends Fragment implements View.OnClickListener {
                     Runnable runnable = new Runnable() {
                         @Override
                         public void run() {
-                            cardArray.get(aux).setImageResource(R.drawable.cardback);
-                            cardArray.get(lastFlipped).setImageResource(R.drawable.cardback);
+                            flipper.flipImage(getResources().getDrawable(R.drawable.cardback),cardArray.get(aux));
+                            flipper.flipImage(getResources().getDrawable(R.drawable.cardback),cardArray.get(lastFlipped));
+                            //cardArray.get(aux).setImageResource(R.drawable.cardback);
+                            //cardArray.get(lastFlipped).setImageResource(R.drawable.cardback);
                             canFlip = true;
                         }
                     };
@@ -195,6 +247,29 @@ public class Memory extends Fragment implements View.OnClickListener {
                                 " WHERE user = '" + username + "'";
                         database.execSQL(query);
                     }
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which){
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    for(int i = 0;i < 16;++i){
+                                        flipper.flipImage(getResources().getDrawable(R.drawable.cardback),cardArray.get(i));
+                                        //cardArray.get(i).setImageResource(R.drawable.cardback);
+                                    }
+                                    createTable();
+                                    initializeViews();
+                                    setListeners();
+                                    break;
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    //No button clicked
+                                    break;
+                            }
+                        }
+                    };
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("YOU WON!").setMessage("Do you want to restart?").setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
                 }
             }
 

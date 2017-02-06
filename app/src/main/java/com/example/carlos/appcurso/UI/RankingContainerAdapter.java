@@ -24,7 +24,10 @@ public class RankingContainerAdapter extends FragmentStatePagerAdapter {
         this.context = context;
     }
 
-
+    @Override
+    public int getItemPosition(Object Item){
+        return POSITION_NONE;
+    }
     //crea las tabas, siempre tiene que retornar con el numero de tabs que queremos mostrar
     @Override
     public int getCount() {

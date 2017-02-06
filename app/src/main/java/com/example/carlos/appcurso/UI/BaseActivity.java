@@ -1,6 +1,7 @@
 package com.example.carlos.appcurso.UI;
 
 import android.Manifest;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,10 +24,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.carlos.appcurso.Data.DBHelper;
+import com.example.carlos.appcurso.Data.User;
+import com.example.carlos.appcurso.Domain.MusicService;
 import com.example.carlos.appcurso.R;
+import com.squareup.picasso.Picasso;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import io.fabric.sdk.android.Fabric;
@@ -48,6 +53,7 @@ public class BaseActivity extends AppCompatActivity
     TextView headerText;
     DBHelper helper;
     SQLiteDatabase database;
+    ImageView headerImage;
 
     public String getCurrentUser() {
         return currentUser;
@@ -120,6 +126,14 @@ public class BaseActivity extends AppCompatActivity
                         0);
             }
         }
+
+        int permission;
+        if(Build.VERSION.SDK_INT >= 23) {
+            permission = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+            if(permission != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            }
+        }
         setContentView(R.layout.activity_base);
         initializeViews();
 
@@ -127,9 +141,12 @@ public class BaseActivity extends AppCompatActivity
             currentFragment = getSupportFragmentManager().getFragment(savedInstanceState, "currentFragment");
             currentTag = savedInstanceState.getString("currentTag");
         } else {
-            Calculator calculator = new Calculator();
+            /*Calculator calculator = new Calculator();
             currentFragment = calculator;
-            currentTag = "Calculator";
+            currentTag = "Calculator";*/
+            Help help = new Help();
+            currentFragment = help;
+            currentTag = "Help";
         }
 
         /*String fromNotification = getIntent().getStringExtra("fragmentToOpen");
@@ -163,12 +180,32 @@ public class BaseActivity extends AppCompatActivity
         database = helper.getReadableDatabase();
         if(!helper.userExists(database,currentUser)) helper.insertUser(database,currentUser);
 
+        settings = getSharedPreferences("Preferences", 0);
+        SharedPreferences.Editor editor = settings.edit();
+        User aux = helper.getUser(database,currentUser);
+        editor.putBoolean("toast",aux.getToast());
+        editor.putBoolean("status",aux.getStatus());
+        editor.apply();
+
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         View header = navigationView.getHeaderView(0);
         headerText = (TextView) header.findViewById(R.id.header_text);
         headerText.setText(currentUser);
+        headerImage = (ImageView) header.findViewById(R.id.headerImage);
+
+        User auxuser = helper.getUser(database,currentUser);
+        String auxuri = auxuser.getImage();
+        if(auxuri == null) {
+            Picasso.with(this).load(R.drawable.default_avatar).resize(100,100).centerCrop().into(headerImage);
+        } else {
+            Uri uri = Uri.parse(auxuri);
+            if(Build.VERSION.SDK_INT >= 19) {
+                this.getContentResolver().takePersistableUriPermission(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
+            Picasso.with(this).load(uri).resize(100,100).centerCrop().into(headerImage);
+        }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -203,8 +240,8 @@ public class BaseActivity extends AppCompatActivity
         settings = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         Log.d("PREMENU",Boolean.toString(settings.getBoolean("toast",false)));
         menu.getItem(0).setChecked(settings.getBoolean("toast",false));
-        menu.getItem(1).setChecked(settings.getBoolean("snackbar",false));
-        Log.d("PREMENU",Boolean.toString(settings.getBoolean("snackbar",false)));
+        menu.getItem(1).setChecked(settings.getBoolean("status",false));
+        Log.d("PREMENU",Boolean.toString(settings.getBoolean("status",false)));
         return true;
     }
 
@@ -221,32 +258,63 @@ public class BaseActivity extends AppCompatActivity
             if (item.isChecked()) {
                 item.setChecked(false);
                 editor.putBoolean("toast",false);
+                helper.updatePreference(database,currentUser,"toast",false);
             } else {
                 item.setChecked(true);
                 editor.putBoolean("toast",true);
+                helper.updatePreference(database,currentUser,"toast",true);
             }
             editor.apply();
             return true;
-        } else if (id == R.id.action_snackbar) {
+        } else if (id == R.id.action_status) {
             if (item.isChecked()) {
                 item.setChecked(false);
-                editor.putBoolean("snackbar",false);
+                editor.putBoolean("status",false);
+                helper.updatePreference(database,currentUser,"status",false);
             } else {
                 item.setChecked(true);
-                editor.putBoolean("snackbar",true);
+                editor.putBoolean("status",true);
+                helper.updatePreference(database,currentUser,"status",true);
             }
             editor.apply();
-            Log.d("AfterSnack",Boolean.toString(settings.getBoolean("snackbar",false)));
+            Log.d("AfterSnack",Boolean.toString(settings.getBoolean("status",false)));
             return true;
         } else if (id == R.id.browser_button) {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://google.com"));
             startActivity(intent);
-        }
+        } else if (id == R.id.logout_icon) {
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case DialogInterface.BUTTON_POSITIVE:
 
+                            stopService(new Intent(getApplicationContext(), MusicService.class));
+                            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                            manager.cancelAll();
+                            SharedPreferences settings = getSharedPreferences("Preferences", 0);
+                            SharedPreferences.Editor editor = settings.edit();
+                            editor.putBoolean("logged", false);
+                            editor.apply();
+                            Intent intent = new Intent(getApplicationContext(), Login.class);
+                            startActivity(intent);
+                            finish();
+                            break;
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            //No button clicked
+                            break;
+                    }
+                }
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Are you sure you want to log out?").setPositiveButton("Yes", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener).show();
+        }
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+    //@SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -265,7 +333,7 @@ public class BaseActivity extends AppCompatActivity
             }
             currentTag = "Calculator";
             fragmentTransaction.replace(R.id.fragmentContainer,currentFragment,currentTag);
-            fragmentTransaction.addToBackStack(currentTag);
+            //fragmentTransaction.addToBackStack(currentTag);
             fragmentTransaction.commit();
         } else if(id == R.id.nav_music_player) {
 
@@ -280,7 +348,7 @@ public class BaseActivity extends AppCompatActivity
             }
             currentTag = "MusicPlayer";
             fragmentTransaction.replace(R.id.fragmentContainer,currentFragment,currentTag);
-            fragmentTransaction.addToBackStack(currentTag);
+            //fragmentTransaction.addToBackStack(currentTag);
             fragmentTransaction.commit();
         } else if(id == R.id.nav_ranking) {
             android.support.v4.app.FragmentTransaction fragmentTransaction =
@@ -305,14 +373,14 @@ public class BaseActivity extends AppCompatActivity
             fragmentTransaction.replace(R.id.fragmentContainer, currentFragment, currentTag);
             //fragmentTransaction.addToBackStack(currentTag);
             fragmentTransaction.commit();*/
-            CharSequence colors[] = new CharSequence[] {"4x4", "6x6"};
+            CharSequence colors[] = new CharSequence[]{"4x4", "6x6"};
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Choose size");
             builder.setItems(colors, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if(which == 0) {
+                    if (which == 0) {
                         android.support.v4.app.FragmentTransaction fragmentTransaction =
                                 getSupportFragmentManager().beginTransaction();
                         currentFragment = new Memory();
@@ -331,10 +399,28 @@ public class BaseActivity extends AppCompatActivity
                 }
             });
             builder.show();
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_profile) {
+            android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    getSupportFragmentManager().beginTransaction();
+            /*Fragment rankingFragment = getSupportFragmentManager().findFragmentByTag("RankingContainer");
+            if(rankingFragment != null){
+                currentFragment = rankingFragment;
+            } else {
+                currentFragment = new RankingContainer();
+            }
+            currentTag = "RankingContainer";*/
+            currentFragment = new Profile();
+            currentTag = "Profile";
+            fragmentTransaction.replace(R.id.fragmentContainer, currentFragment, currentTag);
+            //fragmentTransaction.addToBackStack(currentTag);
+            fragmentTransaction.commit();
+        } else if (id == R.id.nav_help) {
+            android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    getSupportFragmentManager().beginTransaction();
+            currentFragment = new Help();
+            currentTag = "Help";
+            fragmentTransaction.replace(R.id.fragmentContainer, currentFragment, currentTag);
+            fragmentTransaction.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

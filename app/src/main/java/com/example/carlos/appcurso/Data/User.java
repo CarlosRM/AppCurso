@@ -42,6 +42,42 @@ public class User {
     private String name;
     private int points4;
     private int points6;
+    private boolean toast;
+    private boolean status;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public boolean isToast() {
+        return toast;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    private String image;
+
+    public void setToast(boolean toast) {
+        this.toast = toast;
+    }
+
+    public boolean getToast () {
+        return toast;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public boolean getStatus() {
+        return status;
+    }
 
     /*public User() {
 

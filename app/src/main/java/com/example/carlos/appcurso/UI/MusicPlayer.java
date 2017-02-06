@@ -1,11 +1,14 @@
 package com.example.carlos.appcurso.UI;
 
 import android.Manifest;
+import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -18,6 +21,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -63,6 +67,7 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
     ImageView playButton;
     ImageView nextButton;
     ImageView previousButton;
+    boolean canUnbind;
 
     boolean isPlaying = false;
 
@@ -109,6 +114,7 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
             isPlaying = savedInstanceState.getBoolean("isPlaying");
             updateUI();
         }*/
+        canUnbind = true;
         return v;
     }
 
@@ -143,6 +149,45 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
         item.setVisible(false);
         item = menu.findItem(R.id.browser_button);
         item.setVisible(false);
+        item = menu.findItem(R.id.restart_memory);
+        item.setVisible(false);
+    }
+
+   @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+        if (id == R.id.logout_icon) {
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case DialogInterface.BUTTON_POSITIVE:
+                            getActivity().unbindService(musicConnection);
+                            canUnbind = false;
+                            getActivity().stopService(new Intent(getActivity(), MusicService.class));
+                            NotificationManager manager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+                            manager.cancelAll();
+                            SharedPreferences settings = getActivity().getSharedPreferences("Preferences", 0);
+                            SharedPreferences.Editor editor = settings.edit();
+                            editor.putBoolean("logged", false);
+                            editor.apply();
+                            Intent intent = new Intent(getActivity(), Login.class);
+                            startActivity(intent);
+                            getActivity().finish();
+                            break;
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            //No button clicked
+                            break;
+                    }
+                }
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Are you sure you want to log out?").setPositiveButton("Yes", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener).show();
+        }
+        return true;
     }
 
     public void play(){
@@ -332,7 +377,7 @@ public class MusicPlayer extends Fragment implements View.OnClickListener, Runna
     public void onDestroy(){
         //getActivity().stopService(playIntent);
         musicService = null;
-        getActivity().unbindService(musicConnection);
+        if(canUnbind) getActivity().unbindService(musicConnection);
         super.onDestroy();
     }
 

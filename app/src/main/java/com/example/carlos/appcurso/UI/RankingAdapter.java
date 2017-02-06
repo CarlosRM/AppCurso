@@ -2,6 +2,7 @@ package com.example.carlos.appcurso.UI;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,18 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingH
         this.inflater = LayoutInflater.from(context);
         this.userDataList = userDataList;
         this.mode = mode;
+    }
+
+    public void removeAll() {
+        int aux = userDataList.size();
+        userDataList.clear();
+        Log.d("AFTERCLEAR","AFTERCLEAR");
+        Log.d("SIZE",Integer.toString(userDataList.size()));
+        for(int i = 0;i<userDataList.size();++i) {
+            Log.d("SIZE",Integer.toString(i));
+        }
+        Log.d("AFTERFOR","AFTERFOR");
+        notifyDataSetChanged();
     }
 
     @Override

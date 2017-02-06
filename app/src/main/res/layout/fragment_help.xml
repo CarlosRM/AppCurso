@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBasicCalculatorButton">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:padding="12dp"
+                android:textColor="#FFF"
+                android:text="@string/toolbar"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:textColor="#FFF"
+                android:paddingTop="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="12dp"
+                android:text="@string/toolbar_help"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="#FFF"
+                android:textSize="20dp"
+                android:padding="12dp"
+                android:text="@string/calculator"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:textColor="#FFF"
+                android:paddingTop="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="12dp"
+                android:text="@string/calculator_help"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="#FFF"
+                android:padding="12dp"
+                android:text="@string/music_player"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:textColor="#FFF"
+                android:paddingTop="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="12dp"
+                android:text="@string/music_player_help"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:padding="12dp"
+                android:textColor="#FFF"
+                android:text="@string/ranking"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:textColor="#FFF"
+                android:paddingTop="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="12dp"
+                android:text="@string/ranking_help"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:padding="12dp"
+                android:textColor="#FFF"
+                android:text="@string/memory"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:textColor="#FFF"
+                android:paddingTop="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="12dp"
+                android:text="@string/memory_help"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:padding="12dp"
+                android:textColor="#FFF"
+                android:text="@string/profile"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:textColor="#FFF"
+                android:paddingTop="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="12dp"
+                android:text="@string/profile_help"/>
+        </LinearLayout>
+    </ScrollView>
+
+
+
+</LinearLayout>
