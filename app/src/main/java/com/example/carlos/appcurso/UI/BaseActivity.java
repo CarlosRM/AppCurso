@@ -191,7 +191,12 @@ public class BaseActivity extends AppCompatActivity
         } else {
             Uri uri = Uri.parse(auxuri);
             if(Build.VERSION.SDK_INT >= 19) {
-                this.getContentResolver().takePersistableUriPermission(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                try {
+                    this.getContentResolver().takePersistableUriPermission(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                }
+                catch (Exception e) {
+
+                }
             }
             Picasso.with(this).load(uri).resize(200,200).centerCrop().into(headerImage);
         }
