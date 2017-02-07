@@ -1,5 +1,7 @@
 package com.example.carlos.appcurso.Domain;
 
+import android.util.Log;
+
 /**
  * Created by Carlos on 25/01/2017.
  */
@@ -52,8 +54,10 @@ public class Token {
                 type = NUMBER;
                 try {
                     value = Double.parseDouble(contents);
+                    Log.d("TAG",Double.toString(value));
                 } catch (Exception ex) {
                     type = UNKNOWN;
+                    Log.d("TAG",Double.toString(value));
                 }
         }
     }

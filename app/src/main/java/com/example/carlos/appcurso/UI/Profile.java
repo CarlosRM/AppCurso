@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -119,20 +120,7 @@ public class Profile extends Fragment implements View.OnClickListener{
                 }
             }
         };
-        if(Build.VERSION.SDK_INT >= 23) {
 
-            int hasFineLocationPermission = getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
-            if (hasFineLocationPermission != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        0);
-            }
-
-            int hasCoarseLocationPermission = getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
-            if (hasCoarseLocationPermission != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                        0);
-            }
-        }
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, lis);
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, lis);
     }
@@ -151,6 +139,8 @@ public class Profile extends Fragment implements View.OnClickListener{
         database = helper.getReadableDatabase();
         String user = ((BaseActivity) getActivity()).getCurrentUser();
         currentUser = helper.getUser(database,user);
+
+
 
         String auxImage = currentUser.getImage();
         if(auxImage == null) {
@@ -210,7 +200,7 @@ public class Profile extends Fragment implements View.OnClickListener{
                             } else pickIntent = new Intent(Intent.ACTION_GET_CONTENT);
                             pickIntent.setType("image/*");
                             pickIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                            startActivityForResult(Intent.createChooser(pickIntent,"Select picture"),PICK_IMAGE);
+                            startActivityForResult(pickIntent,PICK_IMAGE);
                             break;
                     }
                 }
@@ -248,16 +238,23 @@ public class Profile extends Fragment implements View.OnClickListener{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        NavigationView navigationView = ((BaseActivity) getActivity()).getNavigationView();
+        View header = navigationView.getHeaderView(0);
+        ImageView headerImage = (ImageView) header.findViewById(R.id.headerImage);
+
         if (requestCode == PICK_IMAGE) {
             if (resultCode == RESULT_OK) {
                 Uri imageUri = data.getData();
                 Picasso.with(getActivity()).load(imageUri).resize(300,300).centerCrop().into(profilePic);
+                Picasso.with(getActivity()).load(imageUri).resize(200,200).centerCrop().into(headerImage);
                 helper.updateImage(database,currentUser.getName(),imageUri.toString());
             }
         } else if (requestCode == TAKE_PICTURE) {
             if(resultCode == RESULT_OK){
                 Uri imageUri = data.getData();
                 Picasso.with(getActivity()).load(imageUri).resize(300,300).centerCrop().into(profilePic);
+                Picasso.with(getActivity()).load(imageUri).resize(200,200).centerCrop().into(headerImage);
                 helper.updateImage(database,currentUser.getName(),imageUri.toString());
             }
         }

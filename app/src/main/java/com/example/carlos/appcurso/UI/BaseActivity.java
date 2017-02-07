@@ -44,6 +44,10 @@ public class BaseActivity extends AppCompatActivity
     private static final String TWITTER_SECRET = "omJZYYmEXCyDb9z4i4sGWVMQOGIcBzddyDX0cau1MPmtqfzvk6";
 
 
+    public NavigationView getNavigationView() {
+        return navigationView;
+    }
+
     NavigationView navigationView;
     Toolbar toolbar;
     Fragment currentFragment;
@@ -117,6 +121,21 @@ public class BaseActivity extends AppCompatActivity
                 requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             }
         }
+        if(Build.VERSION.SDK_INT >= 23) {
+
+            int hasFineLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+            if (hasFineLocationPermission != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        0);
+            }
+
+            int hasCoarseLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+            if (hasCoarseLocationPermission != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        0);
+            }
+        }
+
         setContentView(R.layout.activity_base);
         initializeViews();
 
@@ -168,13 +187,13 @@ public class BaseActivity extends AppCompatActivity
         User auxuser = helper.getUser(database,currentUser);
         String auxuri = auxuser.getImage();
         if(auxuri == null) {
-            Picasso.with(this).load(R.drawable.default_avatar).resize(100,100).centerCrop().into(headerImage);
+            Picasso.with(this).load(R.drawable.default_avatar).resize(200,200).centerCrop().into(headerImage);
         } else {
             Uri uri = Uri.parse(auxuri);
             if(Build.VERSION.SDK_INT >= 19) {
                 this.getContentResolver().takePersistableUriPermission(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }
-            Picasso.with(this).load(uri).resize(100,100).centerCrop().into(headerImage);
+            Picasso.with(this).load(uri).resize(200,200).centerCrop().into(headerImage);
         }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);

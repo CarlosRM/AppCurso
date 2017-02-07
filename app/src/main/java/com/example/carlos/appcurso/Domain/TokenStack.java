@@ -21,7 +21,8 @@ public class TokenStack {
         return tokens.size() == 0;
     }
     public Token top() {
-        return tokens.get(tokens.size()-1);
+      if(!tokens.isEmpty()) return tokens.get(tokens.size()-1);
+        else return new Token();
     }
 
     /** Mutator methods **/
@@ -29,7 +30,8 @@ public class TokenStack {
         tokens.add(t);
     }
     public void pop() {
-        tokens.remove(tokens.size()-1);
+
+        if(!tokens.isEmpty())tokens.remove(tokens.size()-1);
     }
 
 }

@@ -271,28 +271,29 @@ public class Memory6 extends Fragment implements View.OnClickListener {
                                 " WHERE user = '" + username + "'";
                         database.execSQL(query);
                     }
-                }
-                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
-                            case DialogInterface.BUTTON_POSITIVE:
-                                for(int i = 0;i < 36;++i){
-                                    flipper.flipImage(getResources().getDrawable(R.drawable.cardback),cardArray.get(i));
-                                }
-                                createTable();
-                                initializeViews();
-                                setListeners();
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                break;
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which){
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    for(int i = 0;i < 36;++i){
+                                        flipper.flipImage(getResources().getDrawable(R.drawable.cardback),cardArray.get(i));
+                                    }
+                                    createTable();
+                                    initializeViews();
+                                    setListeners();
+                                    break;
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    break;
+                            }
                         }
-                    }
-                };
+                    };
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("YOU WON!").setMessage("Do you want to restart?").setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No", dialogClickListener).show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("YOU WON!").setMessage("Do you want to restart?").setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
+                }
+
             }
 
         }

@@ -47,7 +47,7 @@
     <string name="ranking_help">Here is where you come when you want to boost your ego by comparing your
         Memory\'s best score against the scores of the other people. Quite sad, really. Oh, and did I mention these
         other people are default database registers? Because this thing has no online features, so unless you and your
-        friends take turns to play on the same phone (come on...), good luck beating Ana\'s 12 movements in the 6x6 mode.
+        friends take turns to play on the same phone (come on...), good luck beating the 6x6 mode in less than 12 moves.
         Yeah, we cheat.\n\nYou can Restart the ranking and then play a game and you\'ll be on top.
         Yeah, good job buddy, you made it. Geez.</string>
 
@@ -63,7 +63,7 @@
     operand priorities, parenthesis and previous answers to deliver precise results. Which is the same as saying that
     this calculator calculates, but hey, I had to fill this part with something. Parenthesis are self-controlled, so you
     can\'t mess that up. Also, you\'ll notice two extra icons on the toolbar. The left one opens Wolfram Alpha in your browser,
-    which an infinitely better calculator. We encourage to use that one instead. The right icon calls to whichever number you input.
+    which is an infinitely better calculator. We encourage you to use that one instead. The right icon calls to whichever number you input.
     Which is useful because reasons. Also, it works. </string>
 
     <string name="profile">Profile</string>

@@ -78,6 +78,8 @@ public class FullCalculator {
                     System.out.println("Error: unbalanced parenthesis.");
                     error = true;
                 }
+            } else if(nextToken.getType() == Token.UNKNOWN){
+                error = true;
             }
 
         }
